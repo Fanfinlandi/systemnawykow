@@ -1,0 +1,79 @@
+<div class="app-container">
+  <div class="habit-card">
+    <h1 class="card-title">Mój Tracker Nawyków</h1>
+
+    <div class="input-section">
+      <input
+        type="text"
+        class="habit-input"
+        placeholder="Dodaj nowy nawyk ..."
+        [(ngModel)]="habitInput"
+        (keyup.enter)="addHabit()"
+        aria-label="New habit input"
+      />
+      <button
+        class="btn-add"
+        (click)="addHabit()"
+        aria-label="Add habit"
+      >
+        Dodaj nawyk
+      </button>
+    </div>
+
+    <ng-container *ngIf="habits.length === 0; else habitList">
+      <p class="no-habits-message">
+        Brak nawyków do wyświetlenia. Dodaj swój pierwszy nawyk!
+      </p>
+    </ng-container>
+
+    <ng-template #habitList>
+      <ul class="habit-list">
+        <li
+          *ngFor="let habit of habits"
+          class="habit-item"
+          [class.completed]="habit.completed"
+        >
+          <div
+            class="habit-checkbox"
+            [class.checked]="habit.completed"
+            (click)="toggleComplete(habit.id)"
+            role="checkbox"
+            [attr.aria-checked]="habit.completed"
+            tabindex="0"
+            (keyup.enter)="toggleComplete(habit.id)"
+            (keyup.space)="toggleComplete(habit.id)"
+          >
+            <ng-container *ngIf="habit.completed">
+              <svg
+                class="checkbox-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </ng-container>
+          </div>
+
+          <span class="habit-text">
+            {{ habit.text }}
+          </span>
+
+          <button
+            class="btn-del"
+            (click)="deleteHabit(habit.id)"
+            [attr.aria-label]="'Delete habit: ' + habit.text"
+          >
+            🗑️
+          </button>
+        </li>
+      </ul>
+    </ng-template>
+  </div>
+</div>
